@@ -2,6 +2,14 @@
 // Will be implemented in Phase 1
 use std::collections::HashMap; // We need HashMap for the 'fields' part
 
+/// Represents errors that can occur during log line parsing.
+#[derive(Debug, PartialEq)] // Allow printing and comparison
+pub enum ParseError {
+    InvalidFormat,
+    UnknownLevel(String),
+
+}
+
 #[derive(Debug, PartialEq, Clone)] // Add Debug for printing, PartialEq for comparisons (useful in tests)
 pub enum LogLevel {
     Info,
@@ -18,19 +26,5 @@ pub struct ParsedLogEntry {
     pub timestamp: String,
     pub level: LogLevel,
     pub message: String,
-    pub fields: HashMap<String, String>,
-
 }
 
-// Helper function to convert string to LogLevel
-fn string_to_log_level(level_str: &str) -> LogLevel {
-    match level_str.to_uppercase().as_str() { // Case-insensitive matching
-        "INFO" => LogLevel::Info,
-        "WARNING" | "WARN" => LogLevel::Warning, // Allow variations
-        "ERROR" | "ERR" => LogLevel::Error,
-        "DEBUG" | "DBG" => LogLevel::Debug,
-        "TRACE" | "TRC" => LogLevel::Trace,
-        "CRITICAL" | "CRIT" | "FATAL" => LogLevel::Critical,
-        _ => LogLevel::Unknown, // Default to Unknown if not matched
-    }
-}

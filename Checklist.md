@@ -10,11 +10,11 @@
 
 - [x] Define Rust structs to represent parsed log entries (e.g., `ParsedLogEntry`).
 - [x] Define Rust enums where appropriate (e.g., `LogLevel`).
-- [ ] Implement parser function(s) `fn parse_line(line: &str) -> Result<ParsedLogEntry, ParseError>`.
-- [ ] Ensure the parser handles at least one common log format (e.g., Apache/Nginx common, structured JSON).
-- [ ] Implement logic to read a sample log file line by line.
-- [ ] Parse each line using your parser function.
-- [ ] Store the successfully parsed entries in a `Vec<ParsedLogEntry>`.
+- [x] Implement parser function(s) `fn parse_line(line: &str) -> Result<ParsedLogEntry, ParseError>`.
+- [x] Ensure the parser handles at least one common log format (e.g., Apache/Nginx common, structured JSON).
+- [x] Implement logic to read a sample log file line by line.
+- [x] Parse each line using your parser function.
+- [x] Store the successfully parsed entries in a `Vec<ParsedLogEntry>`.
 - [ ] Implement basic unit tests for the parser function(s).
 - [ ] Ensure unit tests cover handling of malformed or invalid log lines.
 

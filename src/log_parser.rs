@@ -1,21 +1,20 @@
 // Placeholder for log parsing logic (e.g., parse_line function)
 // Will be implemented in Phase 1
-mod log_data;
-use std::collections::HashMap;
-use crate::log_data::{LogLevel, ParsedLogEntry};
+use crate::log_data::{LogLevel, ParsedLogEntry, ParseError};
+
 
 pub fn parse_line(line: &str) -> Result<ParsedLogEntry, ParseError> {
-    // Placeholder for log entry parsing logic
-    // Will be implemented in Phase 1
-    
+    // Trim whitespace from the line
     let trimmed_line = line.trim();
     if trimmed_line.is_empty() {
-        return Err(ParseError::EmptyLine);
+        return Err(ParseError::InvalidFormat); // Handle empty lines
     }
 
-    let first_space_index = trimmed_line.find(' ');
+    // Find the first space (after timestamp) and the start/end of the level indicator ([LEVEL])
+    let first_space_pos = trimmed_line.find(' ');
     let level_start_pos = trimmed_line.find('[');
-    let levle_end_pos = trimmed_line.find(']');
+    let level_end_pos = trimmed_line.find(']');
+
     // Basic validation based on positions
     if !(first_space_pos.is_some() && level_start_pos.is_some() && level_end_pos.is_some() &&
          level_start_pos.unwrap() > first_space_pos.unwrap() && level_end_pos.unwrap() > level_start_pos.unwrap()) {
@@ -41,15 +40,12 @@ pub fn parse_line(line: &str) -> Result<ParsedLogEntry, ParseError> {
     // Convert the level string to the LogLevel enum
     let level = string_to_log_level(level_str);
 
-    // For this simple parser, we don't extract extra fields yet.
-    let fields = HashMap::new();
 
     // Create and return the ParsedLogEntry
     Ok(ParsedLogEntry {
         timestamp,
         level,
         message,
-        fields,
     })
 }
 

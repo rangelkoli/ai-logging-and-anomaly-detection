@@ -1,22 +1,36 @@
+mod log_parser;
 mod log_data;
 
-use std::collections::HashMap; // We need HashMap for the 'fields' part
-use log_data::{ParsedLogEntry, LogLevel};
-
+use crate::log_data::{ParsedLogEntry};
+use crate::log_parser::parse_line;
+use std::fs::read_to_string;
 fn main() {
-    let mut extra_fields = HashMap::new();
-    extra_fields.insert("user_id".to_string(), "user123".to_string());
+let log_file = "test.log";
+let contents = read_to_string(log_file);
+let mut parsed_entries: Vec<ParsedLogEntry> = Vec::new();
 
+match contents {
+    Ok(data) => {
+        for line in data.lines() {
+            // Here you would call your log parsing function
+            // For example: parse_line(line);
+            match parse_line(line) {
+                Ok(parsed_entry) => {
+                    parsed_entries.push(parsed_entry);
+                },
+                Err(e) => {
+                    eprintln!("Error parsing line '{}': {:?}", line, e);
+                }
+            }
 
-    let log_entry = ParsedLogEntry {
-        timestamp: "2025-05-04T15:30:00Z".to_string(),
-        level: LogLevel::Info, // Use the imported enum variant
-        message: "User logged in successfully".to_string(),
-        fields: extra_fields,
-    };
+        }
+    },
+    Err(e) => {
+        eprintln!("Error reading file {}: {}", log_file, e);
+    }
+}
 
-    println!("Log Entry from main: {:?}", log_entry);
-    println!("Level: {:?}", log_entry.level);
-    // Accessing public fields directly:
-    println!("Message: {}", log_entry.message);
+println!("Parsed {} log entries.", parsed_entries.len());
+println!("Parsed entries: {:?}", parsed_entries);
+
 }
